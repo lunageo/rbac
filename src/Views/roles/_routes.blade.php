@@ -1,5 +1,3 @@
-<hr/>
-<label for="protect">Routes</label>
 <div class="table-responsive">
     <table class="table table-hover table-sm">
         <thead>

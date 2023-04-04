@@ -37,6 +37,28 @@ class Role extends Model
     ];
 
     /**
+     * Get the user list.
+     *
+     * @return Collection | null
+     */
+    public function getUserListAttribute(): mixed
+    {
+        return User::select(config('luna-permissions.user-attributes'))->get();
+    }
+
+    /**
+     * Get a user by id.
+     *
+     * @param integer $user_id
+     *
+     * @return User | null
+     */
+    public function haveUser(int $user_id): mixed
+    {
+        return $this->users->firstWhere('id', $user_id);
+    }
+
+    /**
      * The users that belong to the role.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany

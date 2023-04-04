@@ -6,6 +6,7 @@
     <div class="card-body">
         <h5 class="card-title">Route {{ $route->name }}</h5>
         <h6 class="card-subtitle mb-2 text-muted"></h6>
+
         <fieldset disabled>
 
             <div class="form-group">
@@ -60,18 +61,27 @@
             </div>
 
         </fieldset>
-        <hr/>
-        <label for="protect">Assign roles</label>
-        <form method="POST" action="">
+        
+    </div>
+</div>
+
+<div class="card mt-3">
+    <div class="card-body">
+        <h5 class="card-title">Assign roles</h5>
+        <h6 class="card-subtitle mb-2 text-muted"></h6>
+
+        <?php $route_update = route(config('luna-permissions.routes-as') . "routes.update", [$route]); ?>
+        <form method="POST" action="{{ $route_update }}">
 
             @csrf
 
             @method('PUT')
 
-            @if (!$route->role_list->isEMpty())
+            <div class="d-flex">            
+            @if (!$route->role_list->isEmpty())
 
                 @foreach ($route->role_list as $role)
-                <div class="form-group">
+                <div class="form-group mr-1">
                     <label for="{{ $role->id }}">{{ $role->name }}</label>
                     <select class="form-control form-control-sm" id="{{ $role->id }}" name="roles[{{ $role->id }}]">
                         <option></option>
@@ -81,10 +91,13 @@
                 @endforeach
 
             @endif
-            <button type="submit" class="btn btn-warning btn-sm">Update</button>
+            </div>
+
+            <button type="submit" class="btn btn-warning btn-sm">Assign</button>
 
         </form>
+
     </div>
-</div>
+</div>        
 
 @endsection

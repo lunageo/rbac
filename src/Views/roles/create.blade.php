@@ -11,21 +11,25 @@
 
 </div>
 
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">Create Role</h5>
-        <h6 class="card-subtitle mb-2 text-muted"></h6>
-        <?php $route = route(config('luna-permissions.routes-as') . "roles.store"); ?>
-        <form method="POST" action="{{ $route }}">
+<?php $route = route(config('luna-permissions.routes-as') . "roles.store"); ?>
+<form method="POST" action="{{ $route }}">
 
-        @csrf
+    @csrf
 
-        @include('luna-permissions::roles._form')
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">Create Role</h5>
+            <h6 class="card-subtitle mb-2 text-muted"></h6>
 
-        <button type="submit" class="btn btn-success btn-sm">Create</button>
-
-        </form>
+            @include('luna-permissions::roles._form')
+            
+        </div>
     </div>
-</div>
+
+    @include('luna-permissions::roles._users')
+
+    <button type="submit" class="btn btn-success btn-sm mt-3">Create</button>
+
+</form>
 
 @endsection

@@ -28,4 +28,12 @@ return [
      * Define the routes "as" used in the package routes.
      */
     'routes-as' => 'luna.permissions.',
+
+    /**
+     * The user attributes to display when fetching the user list to assing users to roles.
+     */
+    'user-attributes' => [
+        'id',
+        'name',
+    ]
 ];
