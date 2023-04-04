@@ -1,0 +1,26 @@
+{
+    "name": "luna/permissions",
+
+    "description": "A package tohandle roles and permissions based on the routes defined in a Laravel application.",
+
+    "type": "library",
+
+    "license": "MIT",
+
+    "authors": [
+      {
+        "name": "Samy Otero",
+        "email": "sotero@lunageo.com"
+      }
+    ],
+
+    "require": {},
+
+    "autoload": {
+        "psr-4": {
+          "Luna\\Permissions\\": "src"
+        }
+    }
+
+
+  }
