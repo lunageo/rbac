@@ -52,7 +52,7 @@
 
                     @foreach ($route->roles as $role)
                     <?php $role_route = route(config('luna-permissions.routes-as') . "roles.show", [$role]);?>
-                    <a href="{{ $role_route }}">{{ $role->name }}</a>  
+                    <a class="btn-sm btn-outline-secondary" href="{{ $role_route }}">{{ $role->name }}</a>  
                     @endforeach
 
                 @endif

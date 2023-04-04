@@ -31,7 +31,7 @@
                     <tr>
                         <td>
                             <?php $route = route(config('luna-permissions.routes-as') . "roles.show", [$role]); ?>
-                            <a href="{{ $route }}">
+                            <a class="btn-sm btn-outline-secondary" href="{{ $route }}">
                                 {{ $role->key }}
                             </a>
                         </td>

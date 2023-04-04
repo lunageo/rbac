@@ -13,7 +13,6 @@
 
             @include('luna-permissions::roles._form')
 
-            @include('luna-permissions::roles._routes')
         </div>
     </div>
 
@@ -25,6 +24,7 @@
             <h6 class="card-subtitle mb-2 text-muted"></h6>
 
             @include('luna-permissions::roles._routes')
+            
         </div>
     </div>
 
