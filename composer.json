@@ -1,26 +1,29 @@
 {
-    "name": "luna/permissions",
-
-    "description": "A package tohandle roles and permissions based on the routes defined in a Laravel application.",
-
-    "type": "library",
-
-    "license": "MIT",
-
-    "authors": [
-      {
-        "name": "Samy Otero",
-        "email": "sotero@lunageo.com"
-      }
-    ],
-
-    "require": {},
-
-    "autoload": {
-        "psr-4": {
-          "Luna\\Permissions\\": "src"
-        }
+  "name": "luna/permissions",
+  "description": "A package to handle roles and permissions based on the routes defined in a Laravel application.", 
+  "version": "1.0.0-dev",
+  "type": "library",
+  "keywords": [
+    "laravel",
+    "roles",
+    "permissions",
+    "access",
+    "authorization"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Samy Otero",
+      "email": "sotero@lunageo.com",
+      "homepage": "https://www.lunageo.com"
     }
-
-
+  ],  
+  "require": {
+    "php": ">=7.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Luna\\Permissions\\": "src"
+    }
   }
+}
