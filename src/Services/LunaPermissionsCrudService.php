@@ -126,6 +126,14 @@ class LunaPermissionsCrudService
         $this->role = $this->find($id);
         $this->role->fill($data);
         $this->role->update();
+
+        $user_ids = collect($data['users'])->filter(function ($item) {
+            
+            if (!is_null($item)) {
+                return $item;
+            }
+        })->toArray();
+        $this->role->users()->sync($user_ids);        
     }
 
     /**

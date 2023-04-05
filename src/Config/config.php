@@ -35,5 +35,10 @@ return [
     'user-attributes' => [
         'id',
         'name',
-    ]
+    ],
+
+    /**
+     * Use the package migrations or no.
+     */
+    'use-migrations' => true,
 ];

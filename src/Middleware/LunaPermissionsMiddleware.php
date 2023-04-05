@@ -4,6 +4,7 @@ namespace Luna\Permissions\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Route as AppRoute;
 use Luna\Permissions\Services\LunaPermissionsService;
@@ -17,7 +18,9 @@ class LunaPermissionsMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (LunaPermissionsService::canAccess(AppRoute::current())) {
+        $user = Auth::user();
+        
+        if (LunaPermissionsService::canAccess($user, AppRoute::current()->uri)) {
             return $next($request);
         }
 

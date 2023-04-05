@@ -2,15 +2,21 @@
 
 namespace Luna\Permissions\Services;
 
-use Auth;
 use Luna\Permissions\Models\Role;
 use Luna\Permissions\Models\Route;
 use Illuminate\Support\Collection;
-use Illuminate\Routing\Route as CurrentRoute;
+use Illuminate\Database\Eloquent\Model as User;
 use Illuminate\Support\Facades\Route as AppRoutes;
 
 class LunaPermissionsService
 {
+    /**
+     * Laravel Route object collection.
+     *
+     * @var Collection
+     */
+    public $routes;
+
     /**
      * Routes collection defined in the application routes file.
      *
@@ -44,7 +50,7 @@ class LunaPermissionsService
      */
     public function __construct()
     {
-        //
+        $this->app_routes = collect([]);
     }
 
     /**
@@ -69,10 +75,11 @@ class LunaPermissionsService
      */
     public function setAppRoutes(): LunaPermissionsService
     {
-        $this->app_routes = collect([]);
-        $app_routes = collect(AppRoutes::getRoutes()->getRoutes());
+       $app_routes = collect(AppRoutes::getRoutes()->getRoutes());
+       $this->routes =  $app_routes;
 
         foreach ($app_routes as $app_route) {
+            
             $route  = new Route;
             $route->fill([
                 'method' => implode(', ', $app_route->methods),
@@ -132,9 +139,25 @@ class LunaPermissionsService
      */
     public function checkRoutesToRemove(): LunaPermissionsService
     {
-        $this->routes_to_remove = $this->saved_routes->diff($this->app_routes);
+        $this->routes_to_remove = $this->saved_routes->map(function($arr) {
+            return serialize($arr);
+        })->diffAssoc($this->app_routes->map(function($arr) {
+            return serialize($arr);
+        }))->map(function($arr) {
+            return unserialize($arr);
+        });
 
         return $this;
+    }
+
+    /**
+     * Get the routes to be removed.
+     *
+     * @return Collection
+     */
+    public function getRoutesToRemove(): collection
+    {
+        return $this->routes_to_remove;
     }
 
     /**
@@ -147,7 +170,7 @@ class LunaPermissionsService
     public function removeRoutes(Collection $routes): LunaPermissionsService
     {
         foreach ($routes as $route) {
-            $route->delete();
+            Route::where('name', $route->name)->first()->delete();
         }
 
         return $this;
@@ -161,9 +184,25 @@ class LunaPermissionsService
      */
     public function checkRoutesToAdd(): LunaPermissionsService
     {
-        $this->routes_to_add = $this->app_routes->diff($this->saved_routes);
+        $this->routes_to_add = $this->app_routes->map(function($arr) {
+            return serialize($arr);
+        })->diffAssoc($this->saved_routes->map(function($arr) {
+            return serialize($arr);
+        }))->map(function($arr) {
+            return unserialize($arr);
+        });
 
         return $this;
+    }
+
+    /**
+     * Get the routes to be added.
+     *
+     * @return Collection
+     */
+    public function getRoutesToAdd(): Collection
+    {
+        return $this->routes_to_add;
     }
 
     /**
@@ -211,23 +250,26 @@ class LunaPermissionsService
     /**
      * Check if the authenticated user have access to the current route.
      *
-     * @param \Illuminate\Routing\Route $current_route
+     * @param \Illuminate\Database\Eloquent\Model $user
+     * @param string $current_route_uri
      *
-     * @return bool
+     * @return boolean
      */
-    static public function canAccess(CurrentRoute $current_route): bool
+    static public function canAccess(User $user, string $current_route_uri): bool
     {
         $can_access = false;
-        $user = Auth::user();
         
         if ($user && $user->roles()->exists()) {
             $user_roles = $user->roles;
 
             foreach ($user_roles as $role) {
-                $role = $role->routes->firstWhere('uri',  $current_route->uri);
+
+                if ($role->routes()->exists()) {
+                    $role = $role->routes->firstWhere('uri',  $current_route_uri);
                 
-                if ($role) {
-                    $can_access = true;
+                    if ($role) {
+                        $can_access = true;
+                    }
                 }
             }
         }        

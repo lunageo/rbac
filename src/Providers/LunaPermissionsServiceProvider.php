@@ -3,6 +3,7 @@
 namespace Luna\Permissions\Providers;
 
 use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
@@ -54,7 +55,9 @@ class LunaPermissionsServiceProvider extends ServiceProvider
     {
         Gate::define('have-access', function () {
 
-            return LunaPermissionsService::canAccess(AppRoute::current());
+            $user = Auth::user();
+
+            return LunaPermissionsService::canAccess($user, AppRoute::current()->uri);
         });
     }
 
@@ -142,7 +145,9 @@ class LunaPermissionsServiceProvider extends ServiceProvider
         // web
         Route::group($routes_configuration, function () {
             $this->loadRoutesFrom(__DIR__.'/../Routes/web.php');
-        })->middleware(['web']);
+        })
+        //->middleware(['web'])
+        ;
 
         // api
         // Route::group($routes_configuration, function () {
@@ -157,7 +162,7 @@ class LunaPermissionsServiceProvider extends ServiceProvider
      */
     protected function publishMigrations(): void
     {
-        if ($this->app->runningInConsole()) {
+        if (config('luna-permissions.use-migrations') && $this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__ . '/../Database/migrations/create_routes_table.php.stub' => database_path('migrations/' . date('Y_m_d_His', time()) . 'create_routes_table.php'),
                 __DIR__ . '/../Database/migrations/create_roles_table.php.stub' => database_path('migrations/' . date('Y_m_d_His', time()) . 'create_roles_table.php'),
