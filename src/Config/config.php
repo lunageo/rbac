@@ -7,7 +7,7 @@ return [
      * Any routes within these namespaces wont be added in the db.
      * 
      * For example: 
-     *      - Luna\Permissions\Controllers
+     *      - Luna\RBAC\Controllers
      *      - App\Http\Controllers\Api
      */
     'excluded-namespaces' => [],
@@ -15,19 +15,19 @@ return [
     /**
      * Publish views under views/vendor/luna-permissions
      */
-    'views-folder' => 'luna-permissions',
+    'views-folder' => 'luna-rbac',
 
     /**
      * Define the routes "prefix" used in the package routes.
      * 
      * http://localhost:8000/luna/permisssions
      */
-    'routes-prefix' => '/luna/permissions',
+    'routes-prefix' => '/luna/rbac',
 
     /**
      * Define the routes "as" used in the package routes.
      */
-    'routes-as' => 'luna.permissions.',
+    'routes-as' => 'luna.rbac.',
 
     /**
      * The user attributes to display when fetching the user list to assing users to roles.

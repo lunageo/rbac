@@ -1,6 +1,6 @@
 <?php
 
-namespace Luna\Permissions\Console;
+namespace Luna\RBAC\Console;
 
 use Artisan;
 use Illuminate\Console\Command;
@@ -12,23 +12,24 @@ class LunaPermissionsPublish extends Command
      *
      * @var string
      */
-    protected $signature = 'luna:permissions-publish';
+    protected $signature = 'luna:rbac-publish';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Publish the package configuration (luna-permissions.php).';
+    protected $description = 'Publish all the resouces available.';
 
     /**
      * Execute the console command.
      */
     public function handle(): void
     {
-        // Artisan::call('vendor:publish --provider="Luna\Permissions\Providers\LunaPermissionsServiceProvider" --tag="config"');
-        // Artisan::call('vendor:publish --provider="Luna\Permissions\Providers\LunaPermissionsServiceProvider" --tag="migrations"');
-        // Artisan::call('vendor:publish --provider="Luna\Permissions\Providers\LunaPermissionsServiceProvider" --tag="views"');
-        // Artisan::call('vendor:publish --provider="Luna\Permissions\Providers\LunaPermissionsServiceProvider" --tag="view-components"');
+        Artisan::call('vendor:publish --provider="Luna\Permissions\Providers\LunaPermissionsServiceProvider" --tag="migrations"');
+        Artisan::call('vendor:publish --provider="Luna\Permissions\Providers\LunaPermissionsServiceProvider" --tag="config"');
+        Artisan::call('vendor:publish --provider="Luna\Permissions\Providers\LunaPermissionsServiceProvider" --tag="web-routes"');
+        // Artisan::call('vendor:publish --provider="Luna\Permissions\Providers\LunaPermissionsServiceProvider" --tag="api-routes"');
+        Artisan::call('vendor:publish --provider="Luna\Permissions\Providers\LunaPermissionsServiceProvider" --tag="views"');
     }
 }

@@ -1,14 +1,14 @@
 <?php
 
-namespace Luna\Permissions\Tests\Unit;
+namespace Luna\RBAC\Tests\Unit;
 
 use DB;
-use Luna\Permissions\Models\Role;
-use Luna\Permissions\Models\Route;
-use Luna\Permissions\Tests\BaseTest;
+use Luna\RBAC\Models\Role;
+use Luna\RBAC\Models\Route;
+use Luna\RBAC\Tests\BaseTest;
+use Luna\RBAC\Tests\Misc\User;
 use Illuminate\Support\Facades\Auth;
-use Luna\Permissions\Tests\Misc\User;
-use Luna\Permissions\Services\LunaPermissionsService;
+use Luna\RBAC\Services\LunaPermissionsService;
 
 class LunaPermissionsServiceTest extends BaseTest
 {
@@ -39,7 +39,7 @@ class LunaPermissionsServiceTest extends BaseTest
         ]);
         // create the routes
         $this->route_collection->add($this->router->get('/dummy/route/protected', [
-            'namespace' => 'Luna\Permissions\Tests\Misc',
+            'namespace' => 'Luna\RBAC\Tests\Misc',
             'as' => 'dummy.route.protected',
             'uses' => 'DummyController@dummyIndex',
             'middleware' => ['luna-access'],
@@ -91,7 +91,7 @@ class LunaPermissionsServiceTest extends BaseTest
         ]);
         // create the routes
         $this->route_collection->add($this->router->get('/dummy/route/protected', [
-            'namespace' => 'Luna\Permissions\Tests\Misc',
+            'namespace' => 'Luna\RBAC\Tests\Misc',
             'as' => 'dummy.route.protected',
             'uses' => 'DummyController@dummyIndex',
             'middleware' => ['luna-access'],
@@ -124,14 +124,14 @@ class LunaPermissionsServiceTest extends BaseTest
             'first' => [
                 'method' => 'GET, HEAD',
                 'uri' => 'dummy/route',
-                'namespace' => 'Luna\Permissions\Tests\Misc',
+                'namespace' => 'Luna\RBAC\Tests\Misc',
                 'as' => 'dummy.route',
                 'uses' => 'DummyController@dummyIndex',
             ],
             'second' => [
                 'method' => 'GET, HEAD',
                 'uri' => 'dummy/route/another',
-                'namespace' => 'Luna\Permissions\Tests\Misc',
+                'namespace' => 'Luna\RBAC\Tests\Misc',
                 'as' => 'dummy.route.another',
                 'uses' => 'DummyController@dummyIndex',
             ]
@@ -157,14 +157,14 @@ class LunaPermissionsServiceTest extends BaseTest
                 'uri' => 'first/dummy/route',
                 'name' => 'first.dummy.route',
                 'action' => 'DummyController@dummyIndex',
-                'namespace' => 'Luna\Permissions\Tests\Misc',
+                'namespace' => 'Luna\RBAC\Tests\Misc',
             ],
             'second' => [
                 'method' => 'GET, HEAD',
                 'uri' => 'second/dummy/route',
                 'name' => 'second/dummy.route',
                 'action' => 'DummyController@dummyIndex',
-                'namespace' => 'Luna\Permissions\Tests\Misc',
+                'namespace' => 'Luna\RBAC\Tests\Misc',
             ],
         ];
         Route::create($data['first']);
@@ -192,14 +192,14 @@ class LunaPermissionsServiceTest extends BaseTest
             'first' => [
                 'method' => 'GET, HEAD',
                 'uri' => 'dummy/route',
-                'namespace' => 'Luna\Permissions\Tests\Misc',
+                'namespace' => 'Luna\RBAC\Tests\Misc',
                 'as' => 'dummy.route',
                 'uses' => 'DummyController@dummyIndex',
             ],
             'second' => [
                 'method' => 'GET, HEAD',
                 'uri' => 'dummy/route/another',
-                'namespace' => 'Luna\Permissions\Tests\Misc',
+                'namespace' => 'Luna\RBAC\Tests\Misc',
                 'as' => 'dummy.route.another',
                 'uses' => 'DummyController@dummyIndex',
             ]
@@ -225,14 +225,14 @@ class LunaPermissionsServiceTest extends BaseTest
             'first' => [
                 'method' => 'GET, HEAD',
                 'uri' => 'dummy/route',
-                'namespace' => 'Luna\Permissions\Tests\Misc',
+                'namespace' => 'Luna\RBAC\Tests\Misc',
                 'as' => 'dummy.route',
                 'uses' => 'DummyController@dummyIndex',
             ],
             'second' => [
                 'method' => 'GET, HEAD',
                 'uri' => 'dummy/route/another',
-                'namespace' => 'Luna\Permissions\Tests\Misc',
+                'namespace' => 'Luna\RBAC\Tests\Misc',
                 'as' => 'dummy.route.another',
                 'uses' => 'DummyController@dummyIndex',
             ]
@@ -257,14 +257,14 @@ class LunaPermissionsServiceTest extends BaseTest
                 'uri' => 'first/dummy/route',
                 'name' => 'first.dummy.route',
                 'action' => 'DummyController@dummyIndex',
-                'namespace' => 'Luna\Permissions\Tests\Misc',
+                'namespace' => 'Luna\RBAC\Tests\Misc',
             ],
             'second' => [
                 'method' => 'GET, HEAD',
                 'uri' => 'second/dummy/route',
                 'name' => 'second/dummy.route',
                 'action' => 'DummyController@dummyIndex',
-                'namespace' => 'Luna\Permissions\Tests\Misc',
+                'namespace' => 'Luna\RBAC\Tests\Misc',
             ],
         ];
         Route::create($data['first']);
@@ -303,14 +303,14 @@ class LunaPermissionsServiceTest extends BaseTest
                 'uri' => 'first/dummy/route',
                 'name' => 'first.dummy.route',
                 'action' => 'DummyController@dummyIndex',
-                'namespace' => 'Luna\Permissions\Tests\Misc',
+                'namespace' => 'Luna\RBAC\Tests\Misc',
             ],
             'second' => [
                 'method' => 'GET, HEAD',
                 'uri' => 'second/dummy/route',
                 'name' => 'second/dummy.route',
                 'action' => 'DummyController@dummyIndex',
-                'namespace' => 'Luna\Permissions\Tests\Misc',
+                'namespace' => 'Luna\RBAC\Tests\Misc',
             ],
         ];
         Route::create($data['first']);
@@ -347,7 +347,7 @@ class LunaPermissionsServiceTest extends BaseTest
             'uri' => 'dummy/route',
             'name' => 'dummy.route',
             'action' => 'DummyController@dummyIndex',
-            'namespace' => 'Luna\Permissions\Tests\Misc',
+            'namespace' => 'Luna\RBAC\Tests\Misc',
         ];
         Route::create($data);
         // check it was inserted
@@ -383,14 +383,14 @@ class LunaPermissionsServiceTest extends BaseTest
                 'uri' => 'dummy/route',
                 'name' => 'dummy.route',
                 'action' => 'DummyController@dummyIndex',
-                'namespace' => 'Luna\Permissions\Tests\Misc',
+                'namespace' => 'Luna\RBAC\Tests\Misc',
             ],
             1=> [
                 'method' => 'GET, HEAD',
                 'uri' => 'dummy/route/another',
                 'name' => 'dummy.route.another',
                 'action' => 'DummyController@dummyIndex',
-                'namespace' => 'Luna\Permissions\Tests\Misc',
+                'namespace' => 'Luna\RBAC\Tests\Misc',
             ]
         ];
         $service = new LunaPermissionsService;

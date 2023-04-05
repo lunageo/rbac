@@ -1,6 +1,6 @@
 <?php
 
-namespace Luna\Permissions\Models;
+namespace Luna\RBAC\Models;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;

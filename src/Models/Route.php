@@ -1,8 +1,8 @@
 <?php
 
-namespace Luna\Permissions\Models;
+namespace Luna\RBAC\Models;
 
-use Luna\Permissions\Models\Role;
+use Luna\RBAC\Models\Role;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;

@@ -1,9 +1,9 @@
 <?php
 
-namespace Luna\Permissions\Tests\Misc;
+namespace Luna\RBAC\Tests\Misc;
 
 use Illuminate\Foundation\Auth\User as BaseUser;
-use Luna\Permissions\Traits\LunaPermissionsTrait;
+use Luna\RBAC\Traits\LunaPermissionsTrait;
 
 class User extends BaseUser
 {

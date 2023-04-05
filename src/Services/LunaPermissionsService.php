@@ -1,22 +1,15 @@
 <?php
 
-namespace Luna\Permissions\Services;
+namespace Luna\RBAC\Services;
 
-use Luna\Permissions\Models\Role;
-use Luna\Permissions\Models\Route;
+use Luna\RBAC\Models\Role;
+use Luna\RBAC\Models\Route;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model as User;
 use Illuminate\Support\Facades\Route as AppRoutes;
 
 class LunaPermissionsService
 {
-    /**
-     * Laravel Route object collection.
-     *
-     * @var Collection
-     */
-    public $routes;
-
     /**
      * Routes collection defined in the application routes file.
      *
@@ -76,7 +69,6 @@ class LunaPermissionsService
     public function setAppRoutes(): LunaPermissionsService
     {
        $app_routes = collect(AppRoutes::getRoutes()->getRoutes());
-       $this->routes =  $app_routes;
 
         foreach ($app_routes as $app_route) {
             
@@ -288,7 +280,7 @@ class LunaPermissionsService
             Role::create([
                 'key' => 'superadmin',
                 'name' => 'Super Admin',
-                'description' => 'Super administrator role',
+                'description' => 'Super administrator role.',
             ]);
         }
     }

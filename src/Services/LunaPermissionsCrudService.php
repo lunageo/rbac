@@ -1,9 +1,9 @@
 <?php
 
-namespace Luna\Permissions\Services;
+namespace Luna\RBAC\Services;
 
-use Luna\Permissions\Models\Role;
-use Luna\Permissions\Models\Route;
+use Luna\RBAC\Models\Role;
+use Luna\RBAC\Models\Route;
 
 class LunaPermissionsCrudService
 {
@@ -24,8 +24,8 @@ class LunaPermissionsCrudService
     /**
      * Class constructor.
      *
-     * @param \Luna\Permissions\Models\Role $role
-     * @param \Luna\Permissions\Models\Route $route
+     * @param \Luna\RBAC\Models\Role $role
+     * @param \Luna\RBAC\Models\Route $route
      */
     public function __construct(Role $role, Route $route)
     {

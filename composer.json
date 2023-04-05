@@ -1,13 +1,14 @@
 {
-  "name": "luna/permissions",
-  "description": "A package to handle roles and permissions based on the routes defined in a Laravel application.", 
+  "name": "luna/rbac",
+  "description": "A RBAC package to handle roles and permissions based on the routes defined in a Laravel application.", 
   "version": "1.0.0-dev",
   "type": "library",
   "keywords": [
     "laravel",
-    "roles",
-    "permissions",
+    "rbac",
     "access",
+    "roles",
+    "permissions",    
     "authorization"
   ],
   "license": "MIT",
@@ -23,8 +24,8 @@
   },
   "autoload": {
     "psr-4": {
-      "Luna\\Permissions\\": "src",
-      "Luna\\Permissions\\Tests\\": "tests"
+      "Luna\\RBAC\\": "src",
+      "Luna\\RBAC\\Tests\\": "tests"
     }
   },
   "require-dev": {

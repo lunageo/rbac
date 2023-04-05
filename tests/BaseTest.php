@@ -1,18 +1,33 @@
 <?php
 
-namespace Luna\Permissions\Tests;
+namespace Luna\RBAC\Tests;
 
 use Artisan;
 use Orchestra\Testbench\TestCase;
 use Illuminate\Routing\RouteCollection;
-use Luna\Permissions\Providers\LunaPermissionsServiceProvider;
+use Luna\RBAC\Providers\LunaPermissionsServiceProvider;
 
 class BaseTest extends TestCase
 {
+    /**
+     * Load environment variables for the tests.
+     *
+     * @var boolean
+     */
     protected $loadEnvironmentVariables = true;
 
+    /**
+     * Laravel Router object.
+     *
+     * @var \Illuminate\Routing\Router
+     */
     protected $router;
 
+    /**
+     * Laravel RouteCollection obj.
+     *
+     * @var Illuminate\Routing\RouteCollection
+     */
     protected $route_collection;
 
     /**
@@ -26,9 +41,9 @@ class BaseTest extends TestCase
     }
 
     /**
-     * Undocumented function
+     * Get the package service providers.
      *
-     * @param [type] $app
+     * @param \Illuminate\Foundation\Application $app
      *
      * @return array
      */
@@ -40,9 +55,9 @@ class BaseTest extends TestCase
     }
 
     /**
-     * Undocumented function
+     * Set up the environment before the tests start.
      *
-     * @param [type] $app
+     * @param \Illuminate\Foundation\Application $app
      *
      * @return void
      */
@@ -71,23 +86,23 @@ class BaseTest extends TestCase
      *
      * @return void
      */
-    protected function defineRoutes($router)
+    protected function defineRoutes($router): void
     {
         $this->router = $router;
         $this->route_collection = new RouteCollection;
 
         $this->route_collection->add($this->router->get('/dummy/route', [
-            'namespace' => 'Luna\Permissions\Tests\Misc',
+            'namespace' => 'Luna\RBAC\Tests\Misc',
             'as' => 'dummy.route',
             'uses' => 'DummyController@dummyIndex',
         ]));
 
         $this->route_collection->add($this->router->get('/dummy/route/another', [
-            'namespace' => 'Luna\Permissions\Tests\Misc',
+            'namespace' => 'Luna\RBAC\Tests\Misc',
             'as' => 'dummy.route.another',
             'uses' => 'DummyController@dummyIndex',
         ]));
-        // routes that  will not be added
+        // routes that will not be added
         $this->route_collection->add($this->router->get('/dummy/route/null-namespace', [
             'namespace' => null,
             'as' => 'dummy.route.null.namespace',
@@ -116,11 +131,11 @@ class BaseTest extends TestCase
     }
 
     /**
-     * Define database migrations.
+     * Run database migrations and clean the database after.
      *
      * @return void
      */
-    protected function defineDatabaseMigrations()
+    protected function defineDatabaseMigrations(): void
     {
         Artisan::call('migrate:fresh', ['--database' => 'testbench']);
 

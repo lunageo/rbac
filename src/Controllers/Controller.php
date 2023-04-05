@@ -1,6 +1,6 @@
 <?php
 
-namespace Luna\Permissions\Controllers;
+namespace Luna\RBAC\Controllers;
 
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;

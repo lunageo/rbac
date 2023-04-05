@@ -1,6 +1,6 @@
 <?php
 
-namespace Luna\Permissions\Providers;
+namespace Luna\RBAC\Providers;
 
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Auth;
@@ -8,12 +8,16 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route as AppRoute;
-use Luna\Permissions\Console\LunaPermissionsInit;
-use Luna\Permissions\Console\LunaPermissionsPublish;
-use Luna\Permissions\Services\LunaPermissionsService;
-use Luna\Permissions\Console\LunaPermissionsCheckRoutes;
-use Luna\Permissions\Middleware\LunaPermissionsMiddleware;
-use Luna\Permissions\Views\Components\RoutesTableViewComponent;
+use Luna\RBAC\Console\LunaPermissionsAdmin;
+use Luna\RBAC\Console\LunaPermissionsPublish;
+use Luna\RBAC\Services\LunaPermissionsService;
+use Luna\RBAC\Console\LunaPermissionsPublishWeb;
+use Luna\RBAC\Console\LunaPermissionsPublishApi;
+use Luna\RBAC\Console\LunaPermissionsCheckRoutes;
+use Luna\RBAC\Console\LunaPermissionsPublishViews;
+use Luna\RBAC\Console\LunaPermissionsPublishConfig;
+use Luna\RBAC\Middleware\LunaPermissionsMiddleware;
+use Luna\RBAC\Console\LunaPermissionsPublishMigrations;
 
 class LunaPermissionsServiceProvider extends ServiceProvider
 {
@@ -40,8 +44,6 @@ class LunaPermissionsServiceProvider extends ServiceProvider
         $this->registerRoutes();
         $this->registerViews();
         $this->publishViews();
-        $this->registerViewComponents();
-        $this->publishViewComponents();
         $this->registerMiddleware();
         $this->registerGates();
     }
@@ -62,7 +64,7 @@ class LunaPermissionsServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register  the package middleware.
+     * Register the package middleware.
      *
      * @return void
      */
@@ -73,39 +75,9 @@ class LunaPermissionsServiceProvider extends ServiceProvider
     }
 
     /**
-     * Publish the package view components.
-     * 
-     * php artisan vendor:publish --provider="Luna\Permissions\Providers\LunaPermissionsServiceProvider" --tag="view-components"
-     *
-     * @return void
-     */
-    protected function publishViewComponents(): void
-    {
-        // if ($this->app->runningInConsole()) {
-        //     // Publish view components
-        //     $this->publishes([
-        //         __DIR__.'/../Views/Components/' => app_path('View/Components'),
-        //         __DIR__.'/../resources/views/components/' => resource_path('views/components'),
-        //     ], 'view-components');
-        // }
-    }
-
-    /**
-     * Register the package view components.
-     *
-     * @return void
-     */
-    protected function registerViewComponents(): void
-    {
-        // $this->loadViewComponentsAs('lunapermissions', [
-        //     RoutesTableViewComponent::class,
-        // ]);
-    }
-
-    /**
      * Publish the package  views.
      * 
-     * php artisan vendor:publish --provider="Luna\Permissions\Providers\LunaPermissionsServiceProvider" --tag="views"
+     * php artisan vendor:publish --provider="Luna\RBAC\Providers\LunaPermissionsServiceProvider" --tag="views"
      *
      * @return void
      */
@@ -114,7 +86,7 @@ class LunaPermissionsServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             // Publish views
             $this->publishes([
-            __DIR__.'/../Views' => resource_path('views/vendor/' . config('luna-permissions.views-folder')),
+                __DIR__.'/../Views' => resource_path('views/vendor/' . config('luna-rbac.views-folder')),
             ], 'views');        
         }
     }
@@ -126,7 +98,27 @@ class LunaPermissionsServiceProvider extends ServiceProvider
      */
     protected function registerViews(): void
     {
-        $this->loadViewsFrom(__DIR__.'/../Views', 'luna-permissions');
+        $this->loadViewsFrom(__DIR__.'/../Views', 'luna-rbac');
+    }
+
+    /**
+     * Publish the package routes.
+     *
+     * php artisan vendor:publish --provider="Luna\RBAC\Providers\LunaPermissionsServiceProvider" --tag="web-routes"
+     * 
+     * @return void
+     */
+    protected function publishRoutes():  void
+    {
+        if ($this->app->runningInConsole()) {
+            $this->publishes([
+                __DIR__ . '/../Routes/web.php' => base_path('routes/luna-rbac-web.php'),
+            ], 'web-routes');
+
+            // $this->publishes([
+            //     __DIR__ . '/../Routes/api.php' => base_path('routes/luna-rbac-api.php'),
+            // ], 'api-routes');
+        }
     }
 
     /**
@@ -137,17 +129,15 @@ class LunaPermissionsServiceProvider extends ServiceProvider
     protected function registerRoutes(): void
     {   
         $routes_configuration = [
-            'namespace' => 'Luna\Permissions\Controllers',
-            'prefix' => config('luna-permissions.routes-prefix'),
-            'as' => config('luna-permissions.routes-as'),
+            'namespace' => 'Luna\RBAC\Controllers',
+            'prefix' => config('luna-rbac.routes-prefix'),
+            'as' => config('luna-rbac.routes-as'),
         ];
 
         // web
         Route::group($routes_configuration, function () {
             $this->loadRoutesFrom(__DIR__.'/../Routes/web.php');
-        })
-        //->middleware(['web'])
-        ;
+        });
 
         // api
         // Route::group($routes_configuration, function () {
@@ -157,17 +147,19 @@ class LunaPermissionsServiceProvider extends ServiceProvider
 
     /**
      * Publish the package migrations.
+     * 
+     * php artisan vendor:publish --provider="Luna\RBAC\Providers\LunaPermissionsServiceProvider" --tag="migrations"
      *
      * @return void
      */
     protected function publishMigrations(): void
     {
-        if (config('luna-permissions.use-migrations') && $this->app->runningInConsole()) {
+        if (config('luna-rbac.use-migrations') && $this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../Database/migrations/create_routes_table.php.stub' => database_path('migrations/' . date('Y_m_d_His', time()) . 'create_routes_table.php'),
-                __DIR__ . '/../Database/migrations/create_roles_table.php.stub' => database_path('migrations/' . date('Y_m_d_His', time()) . 'create_roles_table.php'),
-                __DIR__ . '/../Database/migrations/create_roles_routes_table.php.stub' => database_path('migrations/' . date('Y_m_d_His', time()) . 'create_roles_routes_table.php'),
-                __DIR__ . '/../Database/migrations/create_roles_users_table.php.stub' => database_path('migrations/' . date('Y_m_d_His', time()) . 'create_roles_users_table.php'),
+                __DIR__ . '/../Database/migrations/create_routes_table.php' => database_path('migrations/' . date('Y_m_d_His', time()) . 'create_routes_table.php'),
+                __DIR__ . '/../Database/migrations/create_roles_table.php' => database_path('migrations/' . date('Y_m_d_His', time()) . 'create_roles_table.php'),
+                __DIR__ . '/../Database/migrations/create_roles_routes_table.php' => database_path('migrations/' . date('Y_m_d_His', time()) . 'create_roles_routes_table.php'),
+                __DIR__ . '/../Database/migrations/create_roles_users_table.php' => database_path('migrations/' . date('Y_m_d_His', time()) . 'create_roles_users_table.php'),
               ], 'migrations');
         }
     }
@@ -179,13 +171,13 @@ class LunaPermissionsServiceProvider extends ServiceProvider
      */
     protected function registerConfiguration(): void
     {
-        $this->mergeConfigFrom(__DIR__ . '/../Config/config.php', 'luna-permissions');
+        $this->mergeConfigFrom(__DIR__ . '/../Config/config.php', 'luna-rbac');
     }
 
     /**
      * Allow publishing the package configuration.
      * 
-     * php artisan vendor:publish --provider="Luna\Permissions\Providers\LunaPermissionsServiceProvider" --tag="config"
+     * php artisan vendor:publish --provider="Luna\RBAC\Providers\LunaPermissionsServiceProvider" --tag="config"
      *
      * @return void
      */
@@ -194,9 +186,8 @@ class LunaPermissionsServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
 
             $this->publishes([
-              __DIR__.'/../Config/config.php' => config_path('luna-permissions.php'),
-            ], 'config');
-        
+              __DIR__.'/../Config/config.php' => config_path('luna-rbac.php'),
+            ], 'config');        
         }
     }
 
@@ -209,9 +200,14 @@ class LunaPermissionsServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->commands([
-                LunaPermissionsInit::class,
+                LunaPermissionsAdmin::class,
+                LunaPermissionsCheckRoutes::class,             
                 LunaPermissionsPublish::class,
-                LunaPermissionsCheckRoutes::class,
+                LunaPermissionsPublishMigrations::class,
+                LunaPermissionsPublishConfig::class,
+                LunaPermissionsPublishWeb::class,
+                //LunaPermissionsPublishApi::class,                
+                LunaPermissionsPublishViews::class,
             ]);
         }
     }

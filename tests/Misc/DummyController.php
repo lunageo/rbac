@@ -1,10 +1,15 @@
 <?php
 
-namespace Luna\Permissions\Tests\Misc;
+namespace Luna\RBAC\Tests\Misc;
 
 class DummyController
 {
-    public function dummyIndex()
+    /**
+     * Dummy controller function to test the routes.
+     *
+     * @return void
+     */
+    public function dummyIndex(): void
     {
         //
     }

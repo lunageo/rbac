@@ -1,13 +1,13 @@
 <?php
 
-namespace Luna\Permissions\Middleware;
+namespace Luna\RBAC\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Luna\RBAC\Services\LunaPermissionsService;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Route as AppRoute;
-use Luna\Permissions\Services\LunaPermissionsService;
 
 class LunaPermissionsMiddleware
 {
