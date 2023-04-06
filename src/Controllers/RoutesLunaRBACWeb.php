@@ -4,9 +4,9 @@ namespace Luna\RBAC\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
-use Luna\RBAC\Services\LunaPermissionsCrudService as Service;
+use Luna\RBAC\Services\RoutesService as Service;
 
-class RoutesLunaPermissionsWeb extends Controller
+class RoutesLunaRBACWeb extends Controller
 {
     /**
      * Launch the routes index page.
@@ -24,7 +24,7 @@ class RoutesLunaPermissionsWeb extends Controller
      * Show a route.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \Luna\RBAC\Services\LunaPermissionsCrudService $service
+     * @param \Luna\RBAC\Services\RoutesService $service
      * @param int $id
      *
      * @return View
@@ -40,7 +40,7 @@ class RoutesLunaPermissionsWeb extends Controller
      * Update the roles assigned to a route.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \Luna\RBAC\Services\LunaPermissionsCrudService $service
+     * @param \Luna\RBAC\Services\RoutesService $service
      * @param int $id
      *
      * @return View

@@ -4,19 +4,23 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/routes', [
     'as' => 'routes.index',
-    'uses' => 'RoutesLunaPermissionsWeb@indexRoutes',
+    'uses' => 'RoutesLunaRBACWeb@indexRoutes',
 ]);
 
 Route::get('/routes/{route}', [
     'as' => 'routes.show',
-    'uses' => 'RoutesLunaPermissionsWeb@showRoute',
+    'uses' => 'RoutesLunaRBACWeb@showRoute',
 ]);
 
 Route::put('/routes/{route}', [
     'as' => 'routes.update',
-    'uses' => 'RoutesLunaPermissionsWeb@updateRoles',
+    'uses' => 'RoutesLunaRBACWeb@updateRoles',
 ]);
 
 Route::resources([
-    'roles' => RolesLunaPermissionsWeb::class,
+    'roles' => RolesLunaRBACWeb::class,
+]);
+
+Route::resources([
+    'users' => UsersLunaRBACWeb::class,
 ]);

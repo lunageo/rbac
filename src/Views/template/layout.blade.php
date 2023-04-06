@@ -21,6 +21,8 @@
 
                 <h1>Luna RBAC</h1>
 
+                @include('luna-rbac::template._messages')
+
                 @yield('content')
                 
             </div>

@@ -5,15 +5,17 @@ namespace Luna\RBAC\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Luna\RBAC\Services\LunaPermissionsCrudService as Service;
+use Luna\RBAC\Services\RolesService as Service;
 
-
-class RolesLunaPermissionsWeb extends Controller
+class RolesLunaRBACWeb extends Controller
 {
     /**
      * Launch the roles index page.
      *
-     * @return View
+     * @param \Illuminate\Http\Request $request
+     * @param \Luna\RBAC\Services\RolesService $service
+     *
+     * @return \Illuminate\Contracts\View\View
      */
     public function index(Request $request, Service $service): View
     {
@@ -26,7 +28,7 @@ class RolesLunaPermissionsWeb extends Controller
      * Launch create role view.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \Luna\RBAC\Services\LunaPermissionsCrudService $service
+     * @param \Luna\RBAC\Services\RolesService $service
      *
      * @return View
      */
@@ -41,7 +43,7 @@ class RolesLunaPermissionsWeb extends Controller
      * Store a new role.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \Luna\RBAC\Services\LunaPermissionsCrudService $service
+     * @param \Luna\RBAC\Services\RolesService $service
      *
      * @return RedirectResponse
      */
@@ -56,7 +58,7 @@ class RolesLunaPermissionsWeb extends Controller
      * Show a role data.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \Luna\RBAC\Services\LunaPermissionsCrudService $service
+     * @param \Luna\RBAC\Services\RolesService $service
      * @param int $id
      *
      * @return View
@@ -72,7 +74,7 @@ class RolesLunaPermissionsWeb extends Controller
      * Edit a role.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \Luna\RBAC\Services\LunaPermissionsCrudService $service
+     * @param \Luna\RBAC\Services\RolesService $service
      * @param int $id
      *
      * @return View
@@ -88,7 +90,7 @@ class RolesLunaPermissionsWeb extends Controller
      * Update a role.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \Luna\RBAC\Services\LunaPermissionsCrudService $service
+     * @param \Luna\RBAC\Services\RolesService $service
      * @param int $id
      *
      * @return RedirectResponse
@@ -104,7 +106,7 @@ class RolesLunaPermissionsWeb extends Controller
      * Delete a role.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \Luna\RBAC\Services\LunaPermissionsCrudService $service
+     * @param \Luna\RBAC\Services\RolesService $service
      * @param int $id
      *
      * @return RedirectResponse

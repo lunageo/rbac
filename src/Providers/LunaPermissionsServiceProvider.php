@@ -83,7 +83,7 @@ class LunaPermissionsServiceProvider extends ServiceProvider
      */
     protected function publishViews(): void
     {
-        if ($this->app->runningInConsole()) {
+        if (config('luna-rbac.publish-views') && $this->app->runningInConsole()) {
             // Publish views
             $this->publishes([
                 __DIR__.'/../Views' => resource_path('views/vendor/' . config('luna-rbac.views-folder')),
@@ -110,7 +110,7 @@ class LunaPermissionsServiceProvider extends ServiceProvider
      */
     protected function publishRoutes():  void
     {
-        if ($this->app->runningInConsole()) {
+        if (config('luna-rbac.publish-routes') && $this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__ . '/../Routes/web.php' => base_path('routes/luna-rbac-web.php'),
             ], 'web-routes');
@@ -154,7 +154,7 @@ class LunaPermissionsServiceProvider extends ServiceProvider
      */
     protected function publishMigrations(): void
     {
-        if (config('luna-rbac.use-migrations') && $this->app->runningInConsole()) {
+        if (config('luna-rbac.publish-migrations') && $this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__ . '/../Database/migrations/create_routes_table.php' => database_path('migrations/' . date('Y_m_d_His', time()) . 'create_routes_table.php'),
                 __DIR__ . '/../Database/migrations/create_roles_table.php' => database_path('migrations/' . date('Y_m_d_His', time()) . 'create_roles_table.php'),
