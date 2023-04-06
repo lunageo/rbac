@@ -1,6 +1,6 @@
 {
   "name": "luna/rbac",
-  "description": "A RBAC package to handle roles and permissions based on the routes defined in a Laravel application.", 
+  "description": "A RBAC package for Laravel by Luna Geospatial.", 
   "version": "1.0.0-dev",
   "type": "library",
   "keywords": [
@@ -9,7 +9,10 @@
     "access",
     "roles",
     "permissions",    
-    "authorization"
+    "authorization",
+    "package",
+    "library",
+    "composer"
   ],
   "license": "MIT",
   "authors": [

@@ -7,16 +7,20 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Route as AppRoute;
 use Luna\RBAC\Console\LunaPermissionsAdmin;
 use Luna\RBAC\Console\LunaPermissionsPublish;
+use Luna\RBAC\Middleware\AllowCrudsMiddleware;
 use Luna\RBAC\Services\LunaPermissionsService;
 use Luna\RBAC\Console\LunaPermissionsPublishWeb;
 use Luna\RBAC\Console\LunaPermissionsPublishApi;
 use Luna\RBAC\Console\LunaPermissionsCheckRoutes;
+use Illuminate\Support\Facades\Route as AppRoute;
 use Luna\RBAC\Console\LunaPermissionsPublishViews;
+use Luna\RBAC\Middleware\AllowUsersCrudsMiddleware;
+use Luna\RBAC\Middleware\AllowRolesCrudsMiddleware;
 use Luna\RBAC\Console\LunaPermissionsPublishConfig;
 use Luna\RBAC\Middleware\LunaPermissionsMiddleware;
+use Luna\RBAC\Middleware\AllowRoutesCrudsMiddleware;
 use Luna\RBAC\Console\LunaPermissionsPublishMigrations;
 
 class LunaPermissionsServiceProvider extends ServiceProvider
@@ -72,6 +76,10 @@ class LunaPermissionsServiceProvider extends ServiceProvider
     {
         $router = $this->app->make(Router::class);
         $router->aliasMiddleware('luna-access', LunaPermissionsMiddleware::class);
+        $router->aliasMiddleware('allow-cruds', AllowCrudsMiddleware::class);
+        $router->aliasMiddleware('allow-roles-crud', AllowRolesCrudsMiddleware::class);
+        $router->aliasMiddleware('allow-routes-crud', AllowRoutesCrudsMiddleware::class);
+        $router->aliasMiddleware('allow-users-crud', AllowUsersCrudsMiddleware::class);
     }
 
     /**

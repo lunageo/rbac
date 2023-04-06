@@ -26,10 +26,11 @@ return [
     'routes-prefix' => '/luna/rbac',
 
     /**
-     * Define the routes "as" used in the package routes.
+     * Define the package routes based name.
      * 
      * For example: 
      *      - route('luna.rbac.roles')
+     *      - route('luna.rbac.roles.show')
      */
     'routes-as' => 'luna.rbac.',
 
@@ -69,4 +70,32 @@ return [
      * Publish the package view or no.
      */
     'publish-views' => true,
+
+    /**
+     * Allow access to any of the management routes in the  package: 
+     *      - routes
+     *      - roles
+     *      - users
+     */
+    'allow-cruds' => true,
+
+    /**
+     * Allow access to any of the roles CRUD routes.
+     */
+    'allow-roles-crud' => true,
+
+    /**
+     * Allow access to any of the routes CRUD routes.
+     */
+    'allow-routes-crud' => true,
+
+    /**
+     * Allow access to any of the users CRUD routes.
+     */
+    'allow-users-crud' => true,
+
+    /**
+     * Default error message to be displayed when any of the CRUD routes are not accesible due to package configuration
+     */
+    'allow-cruds-msg' => 'Ups! Something went wrong. The URL you are trying to get does not exist or has restricted access.',
 ];

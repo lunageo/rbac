@@ -2,25 +2,46 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/routes', [
-    'as' => 'routes.index',
-    'uses' => 'RoutesLunaRBACWeb@indexRoutes',
-]);
+Route::group([
+    'middleware' => ['allow-cruds'],
+], function () {
 
-Route::get('/routes/{route}', [
-    'as' => 'routes.show',
-    'uses' => 'RoutesLunaRBACWeb@showRoute',
-]);
+    Route::group([
+        'middleware' => 'allow-routes-crud',
+    ], function () {
 
-Route::put('/routes/{route}', [
-    'as' => 'routes.update',
-    'uses' => 'RoutesLunaRBACWeb@updateRoles',
-]);
+        Route::get('/routes', [
+            'as' => 'routes.index',
+            'uses' => 'RoutesLunaRBACWeb@indexRoutes',
+        ]);
+        
+        Route::get('/routes/{route}', [
+            'as' => 'routes.show',
+            'uses' => 'RoutesLunaRBACWeb@showRoute',
+        ]);
+        
+        Route::put('/routes/{route}', [
+            'as' => 'routes.update',
+            'uses' => 'RoutesLunaRBACWeb@updateRoles',
+        ]);
+    });    
+    
+    Route::group([
+        'middleware' => 'allow-roles-crud',
+    ], function () {
 
-Route::resources([
-    'roles' => RolesLunaRBACWeb::class,
-]);
+        Route::resources([
+            'roles' => RolesLunaRBACWeb::class,
+        ]);
+    }); 
+    
+    Route::group([
+        'middleware' => 'allow-users-crud',
+    ], function () {
 
-Route::resources([
-    'users' => UsersLunaRBACWeb::class,
-]);
+        Route::resources([
+            'users' => UsersLunaRBACWeb::class,
+        ]);
+    });        
+});
+
