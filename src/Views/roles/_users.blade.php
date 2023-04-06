@@ -8,7 +8,7 @@
             <label for="{{ $user->id }}">{{ $user->name }}</label>
             <select class="form-control form-control-sm" id="{{ $user->id }}" name="users[{{ $user->id }}]">
                 <option></option>
-        <option value="{{ $user->id }}" @if($role->haveUser($user->id)) selected @endif>Selected</option>
+                <option value="{{ $user->id }}" @if($role->haveUser($user->id)) selected @endif>Selected</option>
             </select>
         </div>
         @endforeach

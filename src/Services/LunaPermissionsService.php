@@ -43,7 +43,7 @@ class LunaPermissionsService
      */
     public function __construct()
     {
-        $this->app_routes = collect([]);
+        $this->init();
     }
 
     /**
@@ -53,7 +53,8 @@ class LunaPermissionsService
      */
     public function updateAppRoutes(): void
     {
-        $this->setAppRoutes()
+        $this->init()
+            ->setAppRoutes()
             ->setSavedRoutes()
             ->checkRoutesToRemove()
             ->removeRoutes($this->routes_to_remove)
@@ -83,7 +84,7 @@ class LunaPermissionsService
 
             // only routes not blacklisted
             // only routes within a namespace            
-            if (!in_array($route->namespace, config('luna-permissions.excluded-namespaces')) && !empty($route->namespace)) {
+            if (!in_array($route->namespace, config('luna-rbac.excluded-namespaces')) && !empty($route->namespace)) {
                 $this->app_routes->push($route);
             }
         }
@@ -131,13 +132,11 @@ class LunaPermissionsService
      */
     public function checkRoutesToRemove(): LunaPermissionsService
     {
-        $this->routes_to_remove = $this->saved_routes->map(function($arr) {
-            return serialize($arr);
-        })->diffAssoc($this->app_routes->map(function($arr) {
-            return serialize($arr);
-        }))->map(function($arr) {
-            return unserialize($arr);
-        });
+        $this->routes_to_remove = Route::select(['method', 'uri', 'name', 'action', 'namespace'])
+            ->whereNotIn('name', $this->app_routes->map(function ($item) {
+                return $item->name;
+            })->toArray())
+            ->get();
 
         return $this;
     }
@@ -176,12 +175,25 @@ class LunaPermissionsService
      */
     public function checkRoutesToAdd(): LunaPermissionsService
     {
-        $this->routes_to_add = $this->app_routes->map(function($arr) {
-            return serialize($arr);
-        })->diffAssoc($this->saved_routes->map(function($arr) {
-            return serialize($arr);
-        }))->map(function($arr) {
-            return unserialize($arr);
+        $saved_routes = $this->saved_routes;
+        $all = collect(array_merge($saved_routes->toArray(), $this->app_routes->toArray()));
+        $dup = $all->duplicates();
+        $result = $all->reject(function ($v, $k) use ($dup) {
+            return in_array($v, $dup->toArray());
+        });
+
+        $this->routes_to_add = $result->map(function ($item) {
+            
+            $route = new Route;
+            $route->fill([
+                'method' => $item['method'],
+                'uri' => $item['uri'],
+                'name' => $item['name'],
+                'action' => $item['action'],
+                'namespace' => $item['namespace'],
+            ]);
+
+            return $route;
         });
 
         return $this;
@@ -235,6 +247,21 @@ class LunaPermissionsService
     public function storeAllAppRoutes(): LunaPermissionsService
     {
         $this->addRoutes($this->app_routes);
+
+        return $this;
+    }
+
+    /**
+     * Initialize all the service class attributes.
+     *
+     * @return LunaPermissionsService
+     */
+    public function init(): LunaPermissionsService
+    {
+        $this->app_routes = collect([]);
+        $this->saved_routes = collect([]);
+        $this->routes_to_add = collect([]);
+        $this->routes_to_remove = collect([]);
 
         return $this;
     }

@@ -17,6 +17,13 @@ class BaseTest extends TestCase
     protected $loadEnvironmentVariables = true;
 
     /**
+     * Laravel app
+     *
+     * @var Illuminate\Foundation\Application
+     */
+    protected $app;
+
+    /**
      * Laravel Router object.
      *
      * @var \Illuminate\Routing\Router
@@ -63,17 +70,19 @@ class BaseTest extends TestCase
      */
     protected function getEnvironmentSetUp($app): void
     {
-        $app['config']->set('database.default', 'testbench');
-        $app['config']->set('database.connections.testbench', [
+        $this->app = $app;
+
+        $this->app['config']->set('database.default', 'testbench');
+        $this->app['config']->set('database.connections.testbench', [
             'driver'   => 'sqlite',
             'database' => env('DB_DATABASE', __DIR__ . '/Misc/db/database.sqlite'),
             'prefix'   => '',
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ]);
 
-        $app['config']->set('app.debug', env('APP_DEBUG', true));
+        $this->app['config']->set('app.debug', env('APP_DEBUG', true));
 
-        $app['config']->set('luna-permissions.excluded-namespaces', [
+        $this->app['config']->set('luna-rbac.excluded-namespaces', [
             'This\Namespace\Is\Excluded',
             'This\Namespace\Is\Excluded\As\Well',
         ]);

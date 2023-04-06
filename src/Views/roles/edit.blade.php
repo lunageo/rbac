@@ -24,18 +24,18 @@
 
     @include('luna-rbac::roles._users')
 
+    <div class="card mt-3 mb-3">
+        <div class="card-body">
+            <h5 class="card-title">Routes</h5>
+            <h6 class="card-subtitle mb-2 text-muted"></h6>        
+
+            @include('luna-rbac::roles._routes')
+
+        </div>
+    </div>
+
     <button type="submit" class="btn btn-warning btn-sm">Update</button>
 
 </form>
-
-<div class="card mt-3">
-    <div class="card-body">
-        <h5 class="card-title">Routes</h5>
-        <h6 class="card-subtitle mb-2 text-muted"></h6>        
-
-        @include('luna-rbac::roles._routes')
-
-    </div>
-</div>
 
 @endsection

@@ -6,12 +6,11 @@
                 <th scope="col">Uri</th>
                 <th cope="col">Roles</th>
                 <th cope="col">Namespace</th>
+                <th cope="col">Role access</th>
             </tr>
         </thead>
         <tbody>
-        @if ($role->routes()->exists())
-
-            @foreach($role->routes as $route)
+        @foreach($role->route_list as $route)
             <tr>
                 <td>
                     <?php $show_route = route(config('luna-rbac.routes-as') . "routes.show", [$route]);?>
@@ -29,10 +28,14 @@
                 @endif
                 </td>
                 <td>{{ $route->namespace }}</td>
+                <td>
+                    <select class="form-control form-control-sm" id="{{ $route->id }}" name="routes[{{ $route->id }}]">
+                        <option></option>
+                        <option value="{{ $route->id }}" @if($route->haveRole($role->id)) selected @endif>Can Access</option>
+                    </select>
+                </td>
             </tr>
-            @endforeach
-
-        @endif                        
+        @endforeach                 
         </tbody>
     </table>
 </div>

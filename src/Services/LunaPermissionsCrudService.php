@@ -127,13 +127,23 @@ class LunaPermissionsCrudService
         $this->role->fill($data);
         $this->role->update();
 
+        // update users
         $user_ids = collect($data['users'])->filter(function ($item) {
             
             if (!is_null($item)) {
                 return $item;
             }
         })->toArray();
-        $this->role->users()->sync($user_ids);        
+        $this->role->users()->sync($user_ids);
+        
+        // update routes
+        $route_ids = collect($data['routes'])->filter(function ($item) {
+            
+            if (!is_null($item)) {
+                return $item;
+            }
+        })->toArray();
+        $this->role->routes()->sync($route_ids);
     }
 
     /**

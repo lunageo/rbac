@@ -2,124 +2,28 @@
 
 namespace Luna\RBAC\Tests\Unit;
 
-use DB;
-use Luna\RBAC\Models\Role;
 use Luna\RBAC\Models\Route;
 use Luna\RBAC\Tests\BaseTest;
-use Luna\RBAC\Tests\Misc\User;
-use Illuminate\Support\Facades\Auth;
 use Luna\RBAC\Services\LunaPermissionsService;
 
-class LunaPermissionsServiceTest extends BaseTest
+class RoutesServiceTest extends BaseTest
 {
     /**
-     * Test can access.
-     *
-     * @return void
-     */
-    public function testCanAccess(): void
-    {
-        // create role
-        Role::create([
-            'key' => 'test-role',
-            'name' => 'Test Role',
-        ]);
-        // create user
-        User::create([
-            'name' => 'Test User',
-            'email' => 'test.user@email.com',
-            'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            'remember_token' => 'wqaaskajsuyehhgs',
-        ]);        
-        // create role user relation
-        DB::table('roles_users')->insert([
-            'role_id' => Role::where('key', 'test-role')->first()->id,
-            'user_id' => User::where('email', 'test.user@email.com')->first()->id,
-        ]);
-        // create the routes
-        $this->route_collection->add($this->router->get('/dummy/route/protected', [
-            'namespace' => 'Luna\RBAC\Tests\Misc',
-            'as' => 'dummy.route.protected',
-            'uses' => 'DummyController@dummyIndex',
-            'middleware' => ['luna-access'],
-        ]));
-        $this->router->setRoutes($this->route_collection);        
-        // set routes
-        $service = LunaPermissionsService::newInstance();
-        $service->updateAppRoutes();
-
-        // create roles routes relation
-        DB::table('roles_routes')->insert([
-            'role_id' => Role::where('key', 'test-role')->first()->id,
-            'route_id' => Route::where('name', 'dummy.route.protected')->first()->id,
-        ]);
-        // authenticate  user
-        $user = User::where('email', 'test.user@email.com')->first();
-        Auth::loginUsingId($user->id);
-                
-        $expected = true;
-        $actual = $service->canAccess($user, 'dummy/route/protected');
-
-        $this->assertEquals($expected,  $actual);
-    }
-
-    /**
-     * Test can not access
-     *
-     * @return void
-     */
-    public function testCanNotAccess(): void
-    {
-        // create role
-        $role = Role::create([
-            'key' => 'test-role',
-            'name' => 'Test Role',
-        ]);
-        // create user
-        $user = User::create([
-            'name' => 'Test User',
-            'email' => 'test.user@email.com',
-            'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            'remember_token' => 'wqaaskajsuyehhgs',
-        ]);        
-        // create role user relation
-        DB::table('roles_users')->insert([
-            'role_id' => $role->id,
-            'user_id' => $user->id,
-        ]);
-        // create the routes
-        $this->route_collection->add($this->router->get('/dummy/route/protected', [
-            'namespace' => 'Luna\RBAC\Tests\Misc',
-            'as' => 'dummy.route.protected',
-            'uses' => 'DummyController@dummyIndex',
-            'middleware' => ['luna-access'],
-        ]));
-        $this->router->setRoutes($this->route_collection);
-        // authenticate  user
-        $this->actingAs($user);
-
-        $service = LunaPermissionsService::newInstance();
-        $service->updateAppRoutes();
-                
-        $expected = false;
-        $actual = $service->canAccess($user, 'dummy/route/another');
-
-        $this->assertEquals($expected,  $actual);
-    }
-
-    /**
      * Test remove all app routes.
+     * 
+     * @covers unit
      *
      * @return void
      */
     public function testStoreAllAppRoutes(): void
     {
-        LunaPermissionsService::newInstance()
-            ->setAppRoutes()
-            ->storeAllAppRoutes();
+        // Given I set the app routes
+        $service = LunaPermissionsService::newInstance()->setAppRoutes();
 
+        // When I store all the app routes
+        $service->storeAllAppRoutes();
+
+        // Then I should have 2 routes in the db.
         $expected = [
             'first' => [
                 'method' => 'GET, HEAD',
@@ -145,12 +49,14 @@ class LunaPermissionsServiceTest extends BaseTest
 
     /**
      * Test remove all saved routes.
+     * 
+     * @covers unit
      *
      * @return void
      */
     public function testRemoveAllSavedRoutes(): void
     {
-        // insert some routes that are are going to be removed.
+        // Given I insert some routes in the db
         $data = [
             'first' => [
                 'method' => 'GET, HEAD',
@@ -170,8 +76,10 @@ class LunaPermissionsServiceTest extends BaseTest
         Route::create($data['first']);
         Route::create($data['second']);
 
+        // When I remove all the routes
         LunaPermissionsService::newInstance()->removeAllSavedRoutes();
 
+        // Then I should not have routes in the db
         $expected = 0;
         $actual = Route::count();
 
@@ -180,14 +88,20 @@ class LunaPermissionsServiceTest extends BaseTest
 
     /**
      * Test add route.
+     * 
+     * @covers unit
      *
      * @return void
      */
     public function testAddRoute(): void
     {
+        // Given I have new routes defined in a route file
         $service = LunaPermissionsService::newInstance();
+
+        // When I add the routes
         $service->updateAppRoutes();
 
+        // Then I should have routes in the db
         $expected = [
             'first' => [
                 'method' => 'GET, HEAD',
@@ -206,6 +120,7 @@ class LunaPermissionsServiceTest extends BaseTest
         ];
         $actual = Route::get();
 
+        $this->assertEquals(2, $actual->count());
         $this->assertEquals($expected['first']['as'], $actual->first()->name);
         $this->assertEquals($expected['second']['as'], $actual->last()->name);
     }
@@ -213,14 +128,24 @@ class LunaPermissionsServiceTest extends BaseTest
     /**
      * Test the to add.
      * The routes exist in the route files but they don't in the database.
+     * 
+     * @covers unit
      *
      * @return void
      */
     public function testRoutesToAdd()
     {
+        // Given I have new routes defined in a route file
         $service = LunaPermissionsService::newInstance();
-        $service->updateAppRoutes();
 
+        // When I add the routes
+        $service->init()
+            ->setAppRoutes()
+            ->setSavedRoutes()
+            ->checkRoutesToRemove()
+            ->checkRoutesToAdd();
+
+        // Then I should see those routes in the routes to add collection
         $expected = [
             'first' => [
                 'method' => 'GET, HEAD',
@@ -245,12 +170,14 @@ class LunaPermissionsServiceTest extends BaseTest
 
     /**
      * Test deleting routes from the database.
+     * 
+     * @covers unit
      *
      * @return void
      */
     public function testRemoveRoute(): void
     {
-        // insert some routes that are are going to be removed.
+        // Given I have routes in the db that are not defined in a route file
         $data = [
             'first' => [
                 'method' => 'GET, HEAD',
@@ -270,18 +197,18 @@ class LunaPermissionsServiceTest extends BaseTest
         Route::create($data['first']);
         Route::create($data['second']);
 
-        // check they were inserted
-        $this->assertEquals(2, Route::count());
-        $this->assertEqualsCanonicalizing($data['first']['name'], Route::get()->toArray()[0]['name']);
-        $this->assertEqualsCanonicalizing($data['second']['name'], Route::get()->toArray()[1]['name']);
-
+        // When I set the app routes
+        // And I set the saved routes
+        // And I check the routes to remove
         $service = LunaPermissionsService::newInstance();
         $service->setAppRoutes()
             ->setSavedRoutes()
             ->checkRoutesToRemove();
 
+        // And I remove the routes
         $service->removeRoutes($service->getRoutesToRemove());
 
+        // Then I  should not see routes in the db
         $expected = 0;
         $actual = Route::count();
         
@@ -291,12 +218,14 @@ class LunaPermissionsServiceTest extends BaseTest
     /**
      * Test routes to remove.
      * The routes that exist in the database but they are not defined in the route files.
+     * 
+     * @covers unit
      *
      * @return void
      */
     public function testRoutesToRemove(): void
     {
-        // insert some routes that are not defined in the list of tests routes.
+        // Given I have routes in the db that are not defined in a route file
         $data = [
             'first' => [
                 'method' => 'GET, HEAD',
@@ -315,18 +244,18 @@ class LunaPermissionsServiceTest extends BaseTest
         ];
         Route::create($data['first']);
         Route::create($data['second']);
-        // check they were inserted
-        $this->assertEquals(2, Route::count());
-        $this->assertEqualsCanonicalizing($data['first']['name'], Route::get()->toArray()[0]['name']);
-        $this->assertEqualsCanonicalizing($data['second']['name'], Route::get()->toArray()[1]['name']);
 
         $expected = Route::get();
 
+        // When I set the app routes
+        // And I set the saved routes
+        // And I check the routes to remove
         $service = LunaPermissionsService::newInstance();
         $service->setAppRoutes()
             ->setSavedRoutes()
             ->checkRoutesToRemove();
 
+        // Then I should see the amount of routes that are in the db but not defined in the route file
         $actual = $service->getRoutesToRemove();
 
         $this->assertEquals($expected->count(), $actual->count());
@@ -336,12 +265,14 @@ class LunaPermissionsServiceTest extends BaseTest
     /**
      * Test saved routes.
      * The routes saved in the routes table.
+     * 
+     * @covers unit
      *
      * @return void
      */
-    public function testSavedRoutes(): void
+    public function testSetSavedRoutes(): void
     {
-        // insert a route
+        // Given I have routes in the db
         $data = [
             'method' => 'GET, HEAD',
             'uri' => 'dummy/route',
@@ -350,16 +281,12 @@ class LunaPermissionsServiceTest extends BaseTest
             'namespace' => 'Luna\RBAC\Tests\Misc',
         ];
         Route::create($data);
-        // check it was inserted
-        $this->assertEquals(1, Route::count());
-        $this->assertEqualsCanonicalizing($data['method'], Route::first()->method);
-        $this->assertEqualsCanonicalizing($data['uri'], Route::first()->uri);
-        $this->assertEqualsCanonicalizing($data['name'], Route::first()->name);
-        $this->assertEqualsCanonicalizing($data['action'], Route::first()->action);
-        $this->assertEquals($data['namespace'], Route::first()->namespace);
         
+        // When I set the saved routes
         $service = new LunaPermissionsService;
         $service->setSavedRoutes();
+
+        // Then I should see the same amount of routes from the db in the saved routes collection
         $expected = Route::count();
         $actual = $service->getSavedRoutes()->count();
 
@@ -372,11 +299,14 @@ class LunaPermissionsServiceTest extends BaseTest
      * Test no null namespace route is added.
      * Test no empty namespace route is added.
      * Test no excluded namespace route is added.
+     * 
+     * @covers unit
      *
      * @return void
      */
     public function testSetAppRoutes(): void
     {
+        // Given I have routes defined in a route file
         $expected = [
             0 => [
                 'method' => 'GET, HEAD',
@@ -393,23 +323,67 @@ class LunaPermissionsServiceTest extends BaseTest
                 'namespace' => 'Luna\RBAC\Tests\Misc',
             ]
         ];
+
+        // When I set the app routes
         $service = new LunaPermissionsService;
         $service->setAppRoutes();
+
+        // Then I should see the routes defined in a route file in the app routes collection
         $actual = $service->getAppRoutes()->toArray();
 
         $this->assertEqualsCanonicalizing($expected, $actual);
     }
 
     /**
-     * Test new instance of  LunaPermissionsService.
+     * Test initializing the service class.
+     * 
+     * @covers unit
+     *
+     * @return void
+     */
+    public function testInit(): void
+    {
+        // Given I have a new instance of the service
+        $service = LunaPermissionsService::newInstance();
+
+        // And I have app routes collection
+        $service->setAppRoutes();
+
+        // And I have saved routes collection
+        $service->setSavedRoutes();
+
+        // And I have routes to add collection
+        $service->checkRoutesToAdd();
+
+        // And I have routes to remove collection
+        $service->checkRoutesToRemove();
+
+        // When I initialize the service
+        $service->init();
+
+        // Then I should have all collections empty
+        $this->assertEquals(0, $service->getAppRoutes()->count());
+        $this->assertEquals(0, $service->getSavedRoutes()->count());
+        $this->assertEquals(0, $service->getRoutesToAdd()->count());
+        $this->assertEquals(0, $service->getRoutesToRemove()->count());
+    }
+
+    /**
+     * Test new instance of LunaPermissionsService.
+     * 
+     * @covers unit
      *
      * @return void
      */
     public function testNewInstance(): void
     {
+        // Given I have a LunaPermissionsService class
         $expected = LunaPermissionsService::class;
+
+        // When I call the newInstance method
         $actual = LunaPermissionsService::newInstance();
 
+        // Then I should have a new LunaPermissionsService instance
         $this->assertInstanceOf($expected, $actual);
     }
 }

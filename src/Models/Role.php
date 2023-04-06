@@ -3,6 +3,8 @@
 namespace Luna\RBAC\Models;
 
 use App\Models\User;
+use Luna\RBAC\Models\Route;
+use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -39,11 +41,11 @@ class Role extends Model
     /**
      * Get the user list.
      *
-     * @return Collection | null
+     * @return Collection
      */
-    public function getUserListAttribute(): mixed
+    public function getUserListAttribute(): Collection
     {
-        return User::select(config('luna-permissions.user-attributes'))->get();
+        return User::select(config('luna-rbac.user-attributes'))->get();
     }
 
     /**
@@ -76,5 +78,18 @@ class Role extends Model
     public function routes(): BelongsToMany
     {
         return $this->belongsToMany(Route::class, 'roles_routes', 'role_id', 'route_id');
+    }
+
+    /**
+     * Get the route list.
+     *
+     * @return Collection
+     */
+    public function getRouteListAttribute(): Collection
+    {
+        return Route::orderBy('namespace')
+            ->orderBy('name')
+            ->orderBy('uri')
+            ->get();
     }
 }
