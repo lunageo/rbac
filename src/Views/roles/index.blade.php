@@ -1,11 +1,11 @@
-@extends('luna-permissions::template.layout')
+@extends('luna-rbac::template.layout')
 
 @section('content')
 
 <div class="mb-3 d-flex justify-content-between">
 
     <div>
-        <?php $route = route(config('luna-permissions.routes-as') . "roles.create"); ?>
+        <?php $route = route(config('luna-rbac.routes-as') . "roles.create"); ?>
         <a href="{{ $route }}" class="btn btn-success btn-sm">Create</a>
     </div> 
 
@@ -30,7 +30,7 @@
                     @foreach($roles as $role)
                     <tr>
                         <td>
-                            <?php $route = route(config('luna-permissions.routes-as') . "roles.show", [$role]); ?>
+                            <?php $route = route(config('luna-rbac.routes-as') . "roles.show", [$role]); ?>
                             <a class="btn-sm btn-outline-secondary" href="{{ $route }}">
                                 {{ $role->key }}
                             </a>

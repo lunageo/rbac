@@ -2,7 +2,6 @@
 
 namespace Luna\RBAC\Console;
 
-use Artisan;
 use Illuminate\Console\Command;
 
 class LunaPermissionsPublishMigrations extends Command
@@ -26,6 +25,9 @@ class LunaPermissionsPublishMigrations extends Command
      */
     public function handle(): void
     {
-        Artisan::call('vendor:publish --provider="Luna\Permissions\Providers\LunaPermissionsServiceProvider" --tag="migrations"');
+        $this->call('vendor:publish', [
+            '--provider' => 'Luna\RBAC\Providers\LunaPermissionsServiceProvider',
+            '--tag' => 'migrations',
+        ]);
     }
 }

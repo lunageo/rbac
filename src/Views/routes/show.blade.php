@@ -1,4 +1,4 @@
-@extends('luna-permissions::template.layout')
+@extends('luna-rbac::template.layout')
 
 @section('content')
 
@@ -51,7 +51,7 @@
                 @if ($route->roles()->exists())
 
                     @foreach ($route->roles as $role)
-                    <?php $role_route = route(config('luna-permissions.routes-as') . "roles.show", [$role]);?>
+                    <?php $role_route = route(config('luna-rbac.routes-as') . "roles.show", [$role]);?>
                     <a class="btn-sm btn-outline-secondary" href="{{ $role_route }}">{{ $role->name }}</a>  
                     @endforeach
 
@@ -70,7 +70,7 @@
         <h5 class="card-title">Assign roles</h5>
         <h6 class="card-subtitle mb-2 text-muted"></h6>
 
-        <?php $route_update = route(config('luna-permissions.routes-as') . "routes.update", [$route]); ?>
+        <?php $route_update = route(config('luna-rbac.routes-as') . "routes.update", [$route]); ?>
         <form method="POST" action="{{ $route_update }}">
 
             @csrf

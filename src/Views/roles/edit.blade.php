@@ -1,10 +1,10 @@
-@extends('luna-permissions::template.layout')
+@extends('luna-rbac::template.layout')
 
 @section('content')
 
-@include('luna-permissions::roles._navigation')
+@include('luna-rbac::roles._navigation')
 
-<?php $route = route(config('luna-permissions.routes-as') . "roles.update", [$role]); ?>
+<?php $route = route(config('luna-rbac.routes-as') . "roles.update", [$role]); ?>
 <form method="POST" action="{{ $route }}">
 
     @csrf
@@ -16,13 +16,13 @@
             <h5 class="card-title">Role {{ $role->name }}</h5>
             <h6 class="card-subtitle mb-2 text-muted"></h6>
 
-            @include('luna-permissions::roles._form')
+            @include('luna-rbac::roles._form')
 
 
         </div>
     </div>
 
-    @include('luna-permissions::roles._users')
+    @include('luna-rbac::roles._users')
 
     <button type="submit" class="btn btn-warning btn-sm">Update</button>
 
@@ -33,7 +33,7 @@
         <h5 class="card-title">Routes</h5>
         <h6 class="card-subtitle mb-2 text-muted"></h6>        
 
-        @include('luna-permissions::roles._routes')
+        @include('luna-rbac::roles._routes')
 
     </div>
 </div>

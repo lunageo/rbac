@@ -2,7 +2,6 @@
 
 namespace Luna\RBAC\Console;
 
-use Artisan;
 use Illuminate\Console\Command;
 
 class LunaPermissionsPublish extends Command
@@ -26,10 +25,10 @@ class LunaPermissionsPublish extends Command
      */
     public function handle(): void
     {
-        Artisan::call('vendor:publish --provider="Luna\Permissions\Providers\LunaPermissionsServiceProvider" --tag="migrations"');
-        Artisan::call('vendor:publish --provider="Luna\Permissions\Providers\LunaPermissionsServiceProvider" --tag="config"');
-        Artisan::call('vendor:publish --provider="Luna\Permissions\Providers\LunaPermissionsServiceProvider" --tag="web-routes"');
-        // Artisan::call('vendor:publish --provider="Luna\Permissions\Providers\LunaPermissionsServiceProvider" --tag="api-routes"');
-        Artisan::call('vendor:publish --provider="Luna\Permissions\Providers\LunaPermissionsServiceProvider" --tag="views"');
+        $this->call('luna:rbac-publish-migrations');
+        $this->call('luna:rbac-publish-config');
+        $this->call('luna:rbac-publish-web-routes');
+        // $this->call('luna:rbac-publish-api-routes');
+        $this->call('luna:rbac-publish-views');
     }
 }

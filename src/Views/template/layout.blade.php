@@ -19,7 +19,7 @@
 
             <div class="container pb-5">
 
-                <h1>Roles and Permissions</h1>
+                <h1>Luna RBAC</h1>
 
                 @yield('content')
                 

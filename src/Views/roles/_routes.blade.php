@@ -14,7 +14,7 @@
             @foreach($role->routes as $route)
             <tr>
                 <td>
-                    <?php $show_route = route(config('luna-permissions.routes-as') . "routes.show", [$route]);?>
+                    <?php $show_route = route(config('luna-rbac.routes-as') . "routes.show", [$route]);?>
                     <a class="btn-sm btn-outline-secondary" href="{{ $show_route }}">{{ $route->name }}</a>
                 </td>
                 <td>{{ $route->uri }}</td>
@@ -22,7 +22,7 @@
                 @if ($route->roles()->exists())
 
                     @foreach ($route->roles as $user_role)
-                    <?php $role_route = route(config('luna-permissions.routes-as') . "roles.show", [$user_role]);?>
+                    <?php $role_route = route(config('luna-rbac.routes-as') . "roles.show", [$user_role]);?>
                     <a class="btn-sm btn-outline-secondary" href="{{ $role_route }}">{{ $user_role->name }}</a> 
                     @endforeach
 

@@ -2,7 +2,6 @@
 
 namespace Luna\RBAC\Console;
 
-use Artisan;
 use Illuminate\Console\Command;
 
 class LunaPermissionsPublishConfig extends Command
@@ -19,13 +18,16 @@ class LunaPermissionsPublishConfig extends Command
      *
      * @var string
      */
-    protected $description = 'Publish the package configuration (luna-permissions.php).';
+    protected $description = 'Publish the package configuration (luna-rbac.php).';
 
     /**
      * Execute the console command.
      */
     public function handle(): void
     {
-        Artisan::call('vendor:publish --provider="Luna\Permissions\Providers\LunaPermissionsServiceProvider" --tag="config"');
+        $this->call('vendor:publish', [
+            '--provider' => 'Luna\RBAC\Providers\LunaPermissionsServiceProvider',
+            '--tag' => 'config',
+        ]);
     }
 }

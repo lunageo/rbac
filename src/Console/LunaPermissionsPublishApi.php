@@ -2,7 +2,6 @@
 
 namespace Luna\RBAC\Console;
 
-use Artisan;
 use Illuminate\Console\Command;
 
 class LunaPermissionsPublishApi extends Command
@@ -26,6 +25,9 @@ class LunaPermissionsPublishApi extends Command
      */
     public function handle(): void
     {
-        Artisan::call('vendor:publish --provider="Luna\Permissions\Providers\LunaPermissionsServiceProvider" --tag="api-routes"');
+        $this->call('vendor:publish', [
+            '--provider' => 'Luna\RBAC\Providers\LunaPermissionsServiceProvider',
+            '--tag' => 'api-routes',
+        ]);
     }
 }

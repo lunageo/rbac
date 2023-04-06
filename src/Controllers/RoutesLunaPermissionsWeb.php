@@ -15,7 +15,7 @@ class RoutesLunaPermissionsWeb extends Controller
      */
     public function indexRoutes(Request $request, Service $service): View
     {
-        return view('luna-permissions::routes.index', [
+        return view('luna-rbac::routes.index', [
             'routes' => $service->allRoutes()
         ]);
     }
@@ -31,7 +31,7 @@ class RoutesLunaPermissionsWeb extends Controller
      */
     public function showRoute(Request $request, Service $service, $id): View
     {
-        return view('luna-permissions::routes.show', [
+        return view('luna-rbac::routes.show', [
             'route' => $service->findRoute($id)
         ]);
     }
@@ -47,7 +47,7 @@ class RoutesLunaPermissionsWeb extends Controller
      */
     public function updateRoles(Request $request, Service $service, $id): View
     {        
-        return view('luna-permissions::routes.show', [
+        return view('luna-rbac::routes.show', [
             'route' => $service->assignRolesToRoute($id, $request->get('roles'))
         ]);
     }

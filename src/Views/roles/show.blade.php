@@ -1,8 +1,8 @@
-@extends('luna-permissions::template.layout')
+@extends('luna-rbac::template.layout')
 
 @section('content')
 
-@include('luna-permissions::roles._navigation')
+@include('luna-rbac::roles._navigation')
 
 <fieldset disabled>
 
@@ -11,19 +11,19 @@
             <h5 class="card-title">Role {{ $role->name }}</h5>
             <h6 class="card-subtitle mb-2 text-muted"></h6>
 
-            @include('luna-permissions::roles._form')
+            @include('luna-rbac::roles._form')
 
         </div>
     </div>
 
-    @include('luna-permissions::roles._users')
+    @include('luna-rbac::roles._users')
 
     <div class="card">
         <div class="card-body">
             <h5 class="card-title">Routes</h5>
             <h6 class="card-subtitle mb-2 text-muted"></h6>
 
-            @include('luna-permissions::roles._routes')
+            @include('luna-rbac::roles._routes')
             
         </div>
     </div>

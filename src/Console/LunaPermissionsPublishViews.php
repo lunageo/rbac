@@ -2,7 +2,6 @@
 
 namespace Luna\RBAC\Console;
 
-use Artisan;
 use Illuminate\Console\Command;
 
 class LunaPermissionsPublishViews extends Command
@@ -26,6 +25,9 @@ class LunaPermissionsPublishViews extends Command
      */
     public function handle(): void
     {
-        Artisan::call('vendor:publish --provider="Luna\Permissions\Providers\LunaPermissionsServiceProvider" --tag="views"');
+        $this->call('vendor:publish', [
+            '--provider' => 'Luna\RBAC\Providers\LunaPermissionsServiceProvider',
+            '--tag' => 'views',
+        ]);
     }
 }

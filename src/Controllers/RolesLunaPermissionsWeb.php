@@ -17,7 +17,7 @@ class RolesLunaPermissionsWeb extends Controller
      */
     public function index(Request $request, Service $service): View
     {
-        return view('luna-permissions::roles.index', [
+        return view('luna-rbac::roles.index', [
             'roles' => $service->allRoles()
         ]);
     }
@@ -32,7 +32,7 @@ class RolesLunaPermissionsWeb extends Controller
      */
     public function create(Request $request, Service $service): View
     {
-        return view('luna-permissions::roles.create', [
+        return view('luna-rbac::roles.create', [
             'role' => $service->getRole()
         ]);
     }
@@ -49,7 +49,7 @@ class RolesLunaPermissionsWeb extends Controller
     {
         $service->store($request->all());
 
-        return redirect()->route(config('luna-permissions.routes-as') . "roles.index");
+        return redirect()->route(config('luna-rbac.routes-as') . "roles.index");
     }
 
     /**
@@ -63,7 +63,7 @@ class RolesLunaPermissionsWeb extends Controller
      */
     public function show(Request $request,  Service $service, $id): View
     {
-        return view('luna-permissions::roles.show', [
+        return view('luna-rbac::roles.show', [
             'role' => $service->find($id)
         ]);
     }
@@ -79,7 +79,7 @@ class RolesLunaPermissionsWeb extends Controller
      */
     public function edit(Request $request, Service $service, $id): View
     {
-        return view('luna-permissions::roles.edit', [
+        return view('luna-rbac::roles.edit', [
             'role' => $service->find($id)
         ]);
     }
@@ -97,7 +97,7 @@ class RolesLunaPermissionsWeb extends Controller
     {
         $service->update($id, $request->all());
 
-        return redirect()->route(config('luna-permissions.routes-as') . "roles.index");
+        return redirect()->route(config('luna-rbac.routes-as') . "roles.index");
     }
 
     /**
@@ -113,6 +113,6 @@ class RolesLunaPermissionsWeb extends Controller
     {
         $service->destroy($id);
 
-        return redirect()->route(config('luna-permissions.routes-as') . "roles.index");
+        return redirect()->route(config('luna-rbac.routes-as') . "roles.index");
     }
 }
