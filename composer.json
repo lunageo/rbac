@@ -1,6 +1,6 @@
 {
-  "name": "luna/rbac",
-  "description": "A RBAC package for Laravel by Luna Geospatial.", 
+  "name": "lunageo/rbac",
+  "description": "RBAC package for Laravel by Luna Geospatial.", 
   "version": "1.0.0-dev",
   "type": "library",
   "keywords": [
