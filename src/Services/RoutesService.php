@@ -66,18 +66,33 @@ class RoutesService
      *
      * @return Route
      */
-    public function assignRolesToRoute(int $route_id, array $role_ids): route
+    public function assignRolesToRoute(int $route_id, array $data): route
     {
-        $role_ids = collect($role_ids)->filter(function ($item) {
+        $this->route = $this->findRoute($route_id);
+        $this->syncRoles($data);       
+
+        return $this->route;
+    }
+
+    /**
+     * Sync roles to the current route.
+     *
+     * @param array $data
+     *
+     * @return void
+     */
+    protected function syncRoles(array $data): void
+    {
+        if (!array_key_exists('roles', $data)) {
+            $data['roles'] = [];
+        }
+
+        $role_ids = collect($data)->filter(function ($item) {
             
             if (!is_null($item)) {
                 return $item;
             }
         })->toArray();
-
-        $this->route = $this->findRoute($route_id);
         $this->route->roles()->sync($role_ids);
-
-        return $this->route;
     }
 }

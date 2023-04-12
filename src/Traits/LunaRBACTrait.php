@@ -6,7 +6,7 @@ use Luna\RBAC\Models\Role;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-trait LunaPermissionsTrait
+trait LunaRBACTrait
 {
     /**
      * The roles that belong to the user.

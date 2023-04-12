@@ -82,6 +82,23 @@ class RolesService
         $this->role->fill($data);
         $this->role->update();
 
+        $this->syncUsers($data);
+        $this->syncRoutes($data);        
+    }
+
+    /**
+     * Sync users with the current role.
+     *
+     * @param array $data
+     *
+     * @return void
+     */
+    protected function syncUsers(array $data): void
+    {
+        if (!array_key_exists('users', $data)) {
+            $data['users'] = [];
+        }
+
         // update users
         $user_ids = collect($data['users'])->filter(function ($item) {
             
@@ -90,7 +107,21 @@ class RolesService
             }
         })->toArray();
         $this->role->users()->sync($user_ids);
-        
+    }
+
+    /**
+     * Sync the routes with the current role.
+     *
+     * @param array $data
+     *
+     * @return void
+     */
+    protected function syncRoutes(array $data): void
+    {
+        if (!array_key_exists('routes', $data)) {
+            $data['routes'] = [];
+        }
+
         // update routes
         $route_ids = collect($data['routes'])->filter(function ($item) {
             

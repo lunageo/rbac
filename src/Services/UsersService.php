@@ -60,15 +60,7 @@ class UsersService
         $this->user->fill($data);
         $this->user->password = Hash::make($data['password']);
         $this->user->save();
-
-        $role_ids = collect($data['roles'])->filter(function ($item) {
-            
-            if (!is_null($item)) {
-                return $item;
-            }
-        })->toArray();
-        
-        $this->user->roles()->sync($role_ids);
+        $this->syncRoles($data);
     }
 
     /**
@@ -100,6 +92,21 @@ class UsersService
         $this->user = $this->find($id);
         $this->user->fill($data);
         $this->user->update();
+        $this->syncRoles($data);  
+    }
+
+    /**
+     * Sync user roles.
+     *
+     * @param array $data
+     *
+     * @return void
+     */
+    protected function syncRoles(array $data): void
+    {
+        if (!array_key_exists('roles', $data)) {
+            $data['roles'] = [];
+        }
 
         $role_ids = collect($data['roles'])->filter(function ($item) {
             

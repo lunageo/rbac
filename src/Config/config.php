@@ -35,28 +35,6 @@ return [
     'routes-as' => 'luna.rbac.',
 
     /**
-     * The user attributes to display when fetching the user list to assing users to roles.
-     */
-    'user-attributes' => [
-        'id',
-        'name',
-    ],
-
-    /**
-     * Restrict how many roles can be assigned to a user.
-     * 
-     * For example: 
-     *      - 'only-one-role' => false | A User can have many roles and a Role can have many users.
-     *      - 'only-one-role' => true  | A User can only have  one role and a Role can have many users. 
-     */
-    'only-one-role' => false,
-
-    /**
-     * Default error message displayed when "only-one-role" is true and try to assigne 2 or more roles to a user.
-     */
-    'only-one-role-msg' => 'Ups! Something went wrong. User can only be assigned to one role.',
-
-    /**
      * Publish the package migrations or no.
      */
     'use-migrations' => true,
@@ -80,6 +58,11 @@ return [
     'allow-cruds' => true,
 
     /**
+     * Default error message to be displayed when any of the CRUD routes are not accesible due to package configuration
+     */
+    'allow-cruds-msg' => 'Ups! Something went wrong. The URL you are trying to get does not exist or has restricted access.',
+
+    /**
      * Allow access to any of the roles CRUD routes.
      */
     'allow-roles-crud' => true,
@@ -92,10 +75,37 @@ return [
     /**
      * Allow access to any of the users CRUD routes.
      */
-    'allow-users-crud' => true,
+    'allow-users-crud' => true,    
 
     /**
-     * Default error message to be displayed when any of the CRUD routes are not accesible due to package configuration
+     * The user attributes to display when fetching the user list to assing users to roles.
      */
-    'allow-cruds-msg' => 'Ups! Something went wrong. The URL you are trying to get does not exist or has restricted access.',
+    'user-attributes' => [
+        //'id',
+        'name',
+        'email',
+    ],
+
+    /**
+     * The user validation rules for the  fields.
+     */
+    'user-validation' => [
+        'name' => 'required',
+        'email' => 'required',
+        'password' => 'required|confirmed',
+    ],
+
+    /**
+     * Restrict how many roles can be assigned to a user.
+     * 
+     * For example: 
+     *      - 'only-one-role' => false | A User can have many roles and a Role can have many users.
+     *      - 'only-one-role' => true  | A User can only have  one role and a Role can have many users. 
+     */
+    'only-one-role' => false,
+
+    /**
+     * Default error message displayed when "only-one-role" is true and try to assigne 2 or more roles to a user.
+     */
+    'only-one-role-msg' => 'Ups! Something went wrong. User can only be assigned to one role.',
 ];

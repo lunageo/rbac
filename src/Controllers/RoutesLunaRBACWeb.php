@@ -48,7 +48,7 @@ class RoutesLunaRBACWeb extends Controller
     public function updateRoles(Request $request, Service $service, $id): View
     {        
         return view('luna-rbac::routes.show', [
-            'route' => $service->assignRolesToRoute($id, $request->get('roles'))
+            'route' => $service->assignRolesToRoute($id, $request->all())
         ]);
     }
 }

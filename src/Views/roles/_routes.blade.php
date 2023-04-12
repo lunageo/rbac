@@ -29,7 +29,7 @@
                 </td>
                 <td>{{ $route->namespace }}</td>
                 <td>
-                    <select class="form-control form-control-sm" id="{{ $route->id }}" name="routes[{{ $route->id }}]">
+                    <select class="form-select form-select-sm" id="{{ $route->id }}" name="routes[{{ $route->id }}]">
                         <option></option>
                         <option value="{{ $route->id }}" @if($route->haveRole($role->id)) selected @endif>Can Access</option>
                     </select>

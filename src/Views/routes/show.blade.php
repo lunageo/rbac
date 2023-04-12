@@ -81,9 +81,9 @@
             @if (!$route->role_list->isEmpty())
 
                 @foreach ($route->role_list as $role)
-                <div class="form-group mr-1">
+                <div class="form-group me-1">
                     <label for="{{ $role->id }}">{{ $role->name }}</label>
-                    <select class="form-control form-control-sm" id="{{ $role->id }}" name="roles[{{ $role->id }}]">
+                    <select class="form-select form-select-sm" id="{{ $role->id }}" name="roles[{{ $role->id }}]">
                         <option></option>
                         <option value="{{ $role->id }}" @if($route->haveRole($role->id)) selected @endif>Can Access</option>
                     </select>
@@ -93,7 +93,7 @@
             @endif
             </div>
 
-            <button type="submit" class="btn btn-warning btn-sm">Assign</button>
+            <button type="submit" class="btn btn-warning btn-sm mt-3">Assign</button>
 
         </form>
 

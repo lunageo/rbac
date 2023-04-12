@@ -45,7 +45,12 @@ class Role extends Model
      */
     public function getUserListAttribute(): Collection
     {
-        return User::select(config('luna-rbac.user-attributes'))->get();
+        $user_model = new User;
+        $attributes = [];
+        $attributes[] = $user_model->getKeyName();
+        $attributes = array_merge($attributes, config('luna-rbac.user-attributes'));
+        
+        return User::select($attributes)->get();
     }
 
     /**

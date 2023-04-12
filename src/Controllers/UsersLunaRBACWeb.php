@@ -49,11 +49,7 @@ class UsersLunaRBACWeb extends Controller
      */
     public function store(Request $request, Service $service): RedirectResponse
     {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required',
-            'password' => 'required|confirmed',
-        ]);
+        $request->validate(config('luna-rbac.user-validation'));
 
         $service->store($request->all());
 

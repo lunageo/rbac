@@ -12,8 +12,10 @@
             <table class="table table-hover table-sm">
                 <thead>
                     <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Email</th>
+                        <th></th>
+                    @foreach(config('luna-rbac.user-attributes') as $attribute)
+                        <th scope="col">{{ $attribute }}</th>
+                    @endforeach
                     </tr>
                 </thead>
                 <tbody>
@@ -24,10 +26,12 @@
                         <td>
                             <?php $route = route(config('luna-rbac.routes-as') . "users.show", [$user]); ?>
                             <a class="btn-sm btn-outline-secondary" href="{{ $route }}">
-                                {{ $user->name }}
+                                View
                             </a>
                         </td>
-                        <td>{{ $user->email }}</td>
+                        @foreach(config('luna-rbac.user-attributes') as $attribute)
+                        <td>{{ $user->{$attribute} }}</td>
+                        @endforeach
                     </tr>
                     @endforeach
 

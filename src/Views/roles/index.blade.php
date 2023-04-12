@@ -1,5 +1,10 @@
 @extends('luna-rbac::template.layout')
 
+@section('css')
+<link href="https://cdn.datatables.net/v/bs5/jq-3.6.0/dt-1.13.4/r-2.4.1/sb-1.4.2/datatables.min.css" 
+            rel="stylesheet"/>
+@endsection
+
 @section('content')
 
 @include('luna-rbac::roles._navigation')
@@ -9,7 +14,7 @@
         <h5 class="card-title">Roles</h5>
         <h6 class="card-subtitle mb-2 text-muted"></h6>
         <div class="table-responsive">
-            <table class="table table-hover table-sm">
+            <table id="roles" class="table table-hover table-sm">
                 <thead>
                     <tr>
                         <th scope="col">Key</th>
@@ -40,4 +45,12 @@
     </div>
 </div>
 
+@endsection
+
+@section('js')
+<script>
+    $(document).ready(function () {
+        $('#roles').DataTable();
+    });
+</script>
 @endsection
