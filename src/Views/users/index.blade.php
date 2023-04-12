@@ -1,5 +1,10 @@
 @extends('luna-rbac::template.layout')
 
+@section('css')
+<link href="https://cdn.datatables.net/v/bs5/jq-3.6.0/dt-1.13.4/r-2.4.1/sb-1.4.2/datatables.min.css" 
+            rel="stylesheet"/>
+@endsection
+
 @section('content')
 
 @include('luna-rbac::users._navigation')
@@ -9,7 +14,7 @@
         <h5 class="card-title">Users</h5>
         <h6 class="card-subtitle mb-2 text-muted"></h6>
         <div class="table-responsive">
-            <table class="table table-hover table-sm">
+            <table id="users" class="table table-hover table-sm">
                 <thead>
                     <tr>
                         <th></th>
@@ -25,7 +30,7 @@
                     <tr>
                         <td>
                             <?php $route = route(config('luna-rbac.routes-as') . "users.show", [$user]); ?>
-                            <a class="btn-sm btn-outline-secondary" href="{{ $route }}">
+                            <a class="btn btn-sm btn-outline-secondary" href="{{ $route }}">
                                 View
                             </a>
                         </td>
@@ -42,4 +47,12 @@
     </div>
 </div>
 
+@endsection
+
+@section('js')
+<script>
+    $(document).ready(function () {
+        $('#users').DataTable();
+    });
+</script>
 @endsection

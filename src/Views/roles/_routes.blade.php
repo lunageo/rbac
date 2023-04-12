@@ -14,7 +14,7 @@
             <tr>
                 <td>
                     <?php $show_route = route(config('luna-rbac.routes-as') . "routes.show", [$route]);?>
-                    <a class="btn-sm btn-outline-secondary" href="{{ $show_route }}">{{ $route->name }}</a>
+                    <a class="btn btn-sm btn-outline-secondary" href="{{ $show_route }}">{{ $route->name }}</a>
                 </td>
                 <td>{{ $route->uri }}</td>
                 <td>
@@ -22,7 +22,7 @@
 
                     @foreach ($route->roles as $user_role)
                     <?php $role_route = route(config('luna-rbac.routes-as') . "roles.show", [$user_role]);?>
-                    <a class="btn-sm btn-outline-secondary" href="{{ $role_route }}">{{ $user_role->name }}</a> 
+                    <a class="btn btn-sm btn-outline-secondary" href="{{ $role_route }}">{{ $user_role->name }}</a> 
                     @endforeach
 
                 @endif

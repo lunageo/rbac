@@ -1,5 +1,10 @@
 @extends('luna-rbac::template.layout')
 
+@section('css')
+<link href="https://cdn.datatables.net/v/bs5/jq-3.6.0/dt-1.13.4/r-2.4.1/sb-1.4.2/datatables.min.css" 
+            rel="stylesheet"/>
+@endsection
+
 @section('content')
 
 <div class="card">
@@ -7,7 +12,7 @@
         <h5 class="card-title">Routes</h5>
         <h6 class="card-subtitle mb-2 text-muted"></h6>
         <div class="table-responsive">
-        <table class="table table-hover table-sm">
+        <table id="routes" class="table table-hover table-sm">
             <thead>
                 <tr>
                     <th scope="col">Name</th>
@@ -22,7 +27,7 @@
                 <tr>
                     <td>
                         <?php $show_route = route(config('luna-rbac.routes-as') . "routes.show", [$route]);?>
-                        <a class="btn-sm btn-outline-secondary" href="{{ $show_route }}">{{ $route->name }}</a>
+                        <a class="btn btn-sm btn-outline-secondary" href="{{ $show_route }}">{{ $route->name }}</a>
                     </td>
                     <td>{{ $route->uri }}</td>
                     <td>
@@ -45,4 +50,12 @@
     </div>
 </div>
 
+@endsection
+
+@section('js')
+<script>
+    $(document).ready(function () {
+        $('#routes').DataTable();
+    });
+</script>
 @endsection

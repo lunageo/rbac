@@ -29,7 +29,7 @@
                     <tr>
                         <td>
                             <?php $route = route(config('luna-rbac.routes-as') . "roles.show", [$role]); ?>
-                            <a class="btn-sm btn-outline-secondary" href="{{ $route }}">
+                            <a class="btn btn-sm btn-outline-secondary" href="{{ $route }}">
                                 {{ $role->key }}
                             </a>
                         </td>
